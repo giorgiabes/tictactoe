@@ -1,3 +1,6 @@
+import random
+
+
 def main():
     board = create_board()
     count = 0
@@ -27,6 +30,12 @@ def create_board():
         ["-", "-", "-"],
     ]
     return board
+
+
+def ai_random_move(board, symbol):
+    move = random.choice(get_available_moves(board))
+    row, col = move
+    make_move(board, row, col, symbol)
 
 
 def make_move(board, row, col, symbol):
