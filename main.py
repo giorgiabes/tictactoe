@@ -1,9 +1,5 @@
 def main():
-    board = [
-        ["-", "-", "-"],
-        ["-", "-", "-"],
-        ["-", "-", "-"],
-    ]
+    board = create_board()
     count = 0
     print_board(board)
     while True:
@@ -22,6 +18,31 @@ def main():
         else:
             print(f"The spot {row}-{col} is taken")
             continue
+
+
+def create_board():
+    board = [
+        ["-", "-", "-"],
+        ["-", "-", "-"],
+        ["-", "-", "-"],
+    ]
+    return board
+
+
+def make_move(board, row, col, symbol):
+    if board[row][col] == "-":
+        board[row][col] = symbol
+        return True
+    return False
+
+
+def get_available_moves(board):
+    empty_cells = []
+    for row in range(3):
+        for col in range(3):
+            if board[row][col] == "-":
+                empty_cells.append((row, col))
+    return empty_cells
 
 
 def check_winner(board):
