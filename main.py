@@ -1,26 +1,32 @@
 import random
 
-
 def main():
     board = create_board()
-    count = 0
+    current_symbol = "X"  # Human starts
     print_board(board)
-    while True:
-        row, col = get_inputs()
-        if board[row][col] == "-":
-            board[row][col] = get_current_player(count)
-            print_board(board)
-            count += 1
-            winner = check_winner(board)
-            if winner:
-                print(f"Winner is: {winner}")
-                break
-            elif count > 8:
-                print("Tie")
-                break
+
+    for _ in range(9):
+        if current_symbol == "X":
+            # Human move
+            while True:
+                row, col = get_inputs()
+                if make_move(board, row, col, current_symbol):
+                    break
+                else:
+                    print("That spot is taken. Try again.")
         else:
-            print(f"The spot {row}-{col} is taken")
-            continue
+            print("AI is thinking...")
+            ai_random_move(board, current_symbol)
+
+        print_board(board)
+
+        winner = check_winner(board)
+        if winner:
+            print(f"Winner is: {winner}")
+            return
+        current_symbol = "O" if current_symbol == "X" else "X"
+
+    print("It's a tie!")
 
 
 def create_board():
