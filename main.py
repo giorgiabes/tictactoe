@@ -3,9 +3,10 @@ def main():
     count = 0
     print_board(board)
     while True:
+        player = get_current_player(count)
+        print(f"Player {player}'s turn")
         row, col = get_inputs()
-        if board[row][col] == "-":
-            board[row][col] = get_current_player(count)
+        if make_move(board, row, col, player):
             print_board(board)
             count += 1
             winner = check_winner(board)
@@ -19,15 +20,8 @@ def main():
             print(f"The spot {row}-{col} is taken")
             continue
 
-
 def create_board():
-    board = [
-        ["-", "-", "-"],
-        ["-", "-", "-"],
-        ["-", "-", "-"],
-    ]
-    return board
-
+    return [["-" for _ in range(3)] for _ in range(3)]
 
 def make_move(board, row, col, symbol):
     if board[row][col] == "-":
@@ -35,20 +29,20 @@ def make_move(board, row, col, symbol):
         return True
     return False
 
-
-def get_available_moves(board):
-    empty_cells = []
-    for row in range(3):
-        for col in range(3):
-            if board[row][col] == "-":
-                empty_cells.append((row, col))
-    return empty_cells
-
+def get_inputs():
+    while True:
+        try:
+            row = int(input("Enter row (0-2): "))
+            col = int(input("Enter col (0-2): "))
+            if 0 <= row <= 2 and 0 <= col <= 2:
+                return row, col
+            else:
+                print("Row and column must be between 0 and 2.")
+        except ValueError:
+            print("Please enter valid integers.")
 
 def check_winner(board):
-    winner = check_rows(board) or check_cols(board) or check_diagonals(board)
-    return winner
-
+    return check_rows(board) or check_cols(board) or check_diagonals(board)
 
 def check_rows(board):
     for i in range(3):
@@ -56,13 +50,11 @@ def check_rows(board):
             return board[i][0]
     return None
 
-
 def check_cols(board):
     for i in range(3):
         if board[0][i] == board[1][i] == board[2][i] != "-":
             return board[0][i]
     return None
-
 
 def check_diagonals(board):
     if board[0][0] == board[1][1] == board[2][2] != "-":
@@ -71,24 +63,13 @@ def check_diagonals(board):
         return board[1][1]
     return None
 
-
 def print_board(board):
-    for row in board:
-        print(" ".join(row))
-
-
-def get_inputs():
-    row = input("Enter row (0-2): ")
-    col = input("Enter col (0-2): ")
-    return int(row), int(col)
-
+    print("  0 1 2")
+    for i, row in enumerate(board):
+        print(f"{i} {' '.join(row)}")
 
 def get_current_player(count):
-    if count % 2 == 0:
-        return "X"
-    else:
-        return "O"
-
+    return "X" if count % 2 == 0 else "O"
 
 if __name__ == "__main__":
     main()
